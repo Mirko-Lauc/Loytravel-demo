@@ -393,3 +393,47 @@ h3{font-size:1.2rem}
 .is-solid .logo__img{width:52px;height:52px;margin-top:0}
 .logo--foot{width:84px;height:84px;border-radius:50%;margin-bottom:.6rem}
 @media (max-width:560px){.logo__img{width:74px;height:74px;margin-top:22px}.is-solid .logo__img{width:46px;height:46px;margin-top:0}}
+
+/* ===== Test: ¿Qué Brasil es para vos? ===== */
+.quiz-sec{background:radial-gradient(ellipse at top,#2a1a05 0%,var(--negro) 60%)}
+.quiz{max-width:820px;margin:0 auto;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:26px;padding:clamp(1.3rem,4vw,2.6rem);backdrop-filter:blur(6px)}
+.quiz.is-anim>*{animation:fadeup .5s var(--ease) both}
+.quiz__top{display:flex;align-items:center;gap:1rem;font:600 .8rem var(--ui);color:#aaa;margin-bottom:1.2rem}
+.quiz__bar{flex:1;height:6px;background:rgba(255,255,255,.1);border-radius:6px;overflow:hidden}
+.quiz__bar i{display:block;height:100%;background:var(--naranja);border-radius:6px;transition:width .5s var(--ease)}
+.quiz__q{color:#fff;font-size:clamp(1.4rem,3vw,2rem);font-weight:400;margin-bottom:1.4rem}
+.quiz__ops{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.quiz__op{display:flex;align-items:center;gap:.9rem;text-align:left;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);color:#fff;border-radius:16px;padding:1rem 1.1rem;font:600 .98rem var(--ui);cursor:pointer;transition:transform .25s var(--ease),border-color .2s,background .2s}
+.quiz__op:hover{transform:translateY(-3px);border-color:var(--naranja);background:rgba(255,153,0,.08)}
+.quiz__op.is-on{background:var(--naranja);color:var(--negro);border-color:var(--naranja)}
+.quiz__ico{font-size:1.6rem;width:44px;height:44px;display:grid;place-items:center;background:rgba(255,255,255,.08);border-radius:12px;flex:none}
+.quiz__back{margin-top:1.2rem;background:none;border:0;color:#aaa;font:600 .85rem var(--ui);cursor:pointer}
+.quiz__res{display:grid;grid-template-columns:1fr 1.2fr;gap:1.8rem;align-items:center}
+.quiz__resimg{border-radius:20px;overflow:hidden;aspect-ratio:4/5}
+.quiz__resimg img{width:100%;height:100%;object-fit:cover;animation:kb 9s ease-out forwards}
+.quiz__restxt h3{color:#fff;font-size:clamp(2rem,4vw,3rem);font-weight:400;margin:.2rem 0 .6rem}
+.quiz__restxt p{color:#ccc}
+.quiz__tags{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0 1.4rem}
+.quiz__tags span{font:600 .78rem var(--ui);background:rgba(255,255,255,.08);color:#eee;padding:.35rem .7rem;border-radius:999px}
+@media (max-width:640px){.quiz__ops{grid-template-columns:1fr}.quiz__res{grid-template-columns:1fr}.quiz__resimg{aspect-ratio:16/10}}
+
+/* ===== Vista previa de WhatsApp ===== */
+.waprev{margin-top:2rem;max-width:400px;border-radius:20px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.08)}
+.waprev__head{display:flex;align-items:center;gap:.7rem;background:#1f2c33;padding:.7rem 1rem;color:#fff}
+.waprev__head img{width:38px;height:38px;border-radius:50%}
+.waprev__head b{display:block;font:700 .95rem var(--ui)}
+.waprev__head small{color:#8fd19e;font:500 .75rem var(--ui)}
+.waprev__chat{background:#0b141a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='4' cy='4' r='1.2' fill='%23ffffff10'/%3E%3C/svg%3E");padding:1.1rem;display:grid;gap:.5rem}
+.waprev__bubble{justify-self:end;max-width:92%;background:#005c4b;color:#e9edef;padding:.6rem .8rem 1.3rem;border-radius:12px 0 12px 12px;font:500 .84rem/1.5 var(--ui);position:relative;white-space:normal;word-break:break-word}
+.waprev__time{position:absolute;right:.6rem;bottom:.3rem;font-size:.65rem;color:#9ad8c8}
+.waprev__hint{justify-self:end;font:600 .72rem var(--ui);color:#8696a0}
+@media (max-width:860px){#armatuviaje .split{display:flex;flex-direction:column}#armatuviaje .split__txt{display:contents}#armatuviaje .waprev{order:3;margin-top:0;max-width:none;width:100%}}
+
+/* Opiniones reales y acceso al panel */
+.op--real{border-style:solid;border-color:var(--linea);background:#fff;box-shadow:var(--sombra)}
+.footer__admin{color:var(--naranja)!important;text-decoration:none;font-weight:600}
+
+[hidden]{display:none!important}
+.btn--ghost{background:transparent}
+.grid-promo{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+#armatuviaje .split{gap:clamp(1.4rem,5vw,4.5rem)}

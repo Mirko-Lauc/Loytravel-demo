@@ -1,5 +1,20 @@
 (function () {
   "use strict";
+  /* ---------- Cambios hechos desde el panel (demo: guardados en este navegador) ---------- */
+  try {
+    var saved = JSON.parse(localStorage.getItem("loy_content") || "null");
+    if (saved) {
+      if (saved.textos) Object.assign(window.LOY_TEXTOS, saved.textos);
+      ["DESTINOS", "PROMOS", "BLOG", "OPINIONES"].forEach(function (k) { if (Array.isArray(saved[k])) window["LOY_" + k] = saved[k]; });
+      if (saved.WA) window.LOY_WA = saved.WA;
+    }
+  } catch (e) {}
+  var T = window.LOY_TEXTOS;
+  document.querySelectorAll("[data-k]").forEach(function (el) { var v = T[el.dataset.k]; if (v != null) el.textContent = v; });
+  document.querySelectorAll("[data-k-src]").forEach(function (el) { var v = T[el.dataset.kSrc]; if (v) el.src = v; });
+  document.querySelectorAll("[data-k-bg]").forEach(function (el) { var v = T[el.dataset.kBg]; if (v) el.style.backgroundImage = "url(" + JSON.stringify(v) + ")"; });
+  if (T["nos.foto"] && T["nos.foto"] !== "img/nosotros.jpg") document.getElementById("nosCap").hidden = true;
+
   var WA = window.LOY_WA;
   var waLink = function (msg) { return "https://wa.me/" + WA + "?text=" + encodeURIComponent(msg); };
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
@@ -70,10 +85,82 @@
   modal.addEventListener("close", function () { document.body.style.overflow = ""; });
   modal.addEventListener("click", function (e) { if (e.target === modal || e.target.closest(".modal__close")) modal.close(); });
 
+  /* ---------- Opiniones reales (si las cargaron en el panel) ---------- */
+  if (window.LOY_OPINIONES.length) {
+    document.getElementById("gridOp").innerHTML = window.LOY_OPINIONES.map(function (o) {
+      return '<blockquote class="op op--real reveal"><p>"' + esc(o.texto) + '"</p><footer>' + esc(o.nombre) + (o.destino ? " · " + esc(o.destino) : "") + "</footer></blockquote>";
+    }).join("");
+  }
+
+  /* ---------- Test: ¿Qué Brasil es para vos? ---------- */
+  var QZ = [
+    { q: "¿Con quién viajás?", ops: [["En pareja", "pareja", "💑"], ["En familia, con chicos", "familia", "👨‍👩‍👧"], ["Con amigos", "amigos", "🎉"], ["Solo/a", "solo", "🎒"]] },
+    { q: "¿Qué no puede faltar?", ops: [["Playa y descanso total", "playa", "🏖️"], ["Ciudad, cultura y paseos", "ciudad", "🏛️"], ["Todo incluido, sin pensar en nada", "all", "🍹"], ["Naturaleza y aguas cristalinas", "natural", "🐠"]] },
+    { q: "¿Cuántos días tenés?", ops: [["Un finde largo (3-5)", "corto", "⏱️"], ["Una semana", "semana", "📅"], ["10 días o más", "largo", "🗓️"]] },
+    { q: "¿Cuándo querés viajar?", ops: [["Verano (dic-mar)", "verano", "☀️"], ["Otoño o invierno", "invierno", "🍂"], ["Primavera", "primavera", "🌸"], ["Todavía no sé", "nose", "🤔"]] }
+  ];
+  var REC = {
+    "Río de Janeiro": { ciudad: 3, amigos: 2, solo: 2, pareja: 1, corto: 1, semana: 1 },
+    "Florianópolis": { playa: 2, familia: 2, amigos: 2, verano: 2, corto: 2, semana: 1 },
+    "Búzios": { pareja: 3, playa: 2, natural: 1, semana: 1 },
+    "Porto de Galinhas": { familia: 3, natural: 3, playa: 1, largo: 1 },
+    "Maceió": { familia: 2, playa: 2, natural: 2, invierno: 1, largo: 1 },
+    "Salvador de Bahía": { ciudad: 3, solo: 1, amigos: 1, invierno: 1, semana: 1 },
+    "Costa do Sauípe": { all: 4, familia: 1, pareja: 1, semana: 1 }
+  };
+  var quiz = document.getElementById("quiz"), qi = 0, ans = [];
+  function drawQ() {
+    var d = QZ[qi];
+    quiz.innerHTML = '<div class="quiz__top"><span>Pregunta ' + (qi + 1) + " de " + QZ.length + '</span><div class="quiz__bar"><i style="width:' + (qi / QZ.length * 100) + '%"></i></div></div>' +
+      '<h3 class="quiz__q">' + d.q + '</h3><div class="quiz__ops">' +
+      d.ops.map(function (o, i) { return '<button type="button" class="quiz__op" data-i="' + i + '"><span class="quiz__ico">' + o[2] + "</span>" + o[0] + "</button>"; }).join("") + "</div>" +
+      (qi ? '<button type="button" class="quiz__back">← Volver</button>' : "");
+    quiz.classList.remove("is-anim"); void quiz.offsetWidth; quiz.classList.add("is-anim");
+  }
+  function drawResult() {
+    var tags = ans.map(function (a) { return a[1]; }), best = null, bestScore = -1;
+    Object.keys(REC).forEach(function (k) {
+      var sc = tags.reduce(function (t, g) { return t + (REC[k][g] || 0); }, 0);
+      if (sc > bestScore) { bestScore = sc; best = k; }
+    });
+    var d = window.LOY_DESTINOS.filter(function (x) { return x.nombre === best; })[0] || window.LOY_DESTINOS[0];
+    var msg = "Hola Loytravel! Hice el test de la web y me salió " + d.nombre + ".\n" +
+      ans.map(function (a, i) { return "• " + QZ[i].q + " " + a[0]; }).join("\n") + "\n¿Me pasan opciones?";
+    quiz.innerHTML = '<div class="quiz__res"><div class="quiz__resimg"><img src="' + d.img + '" alt=""></div><div class="quiz__restxt">' +
+      '<span class="kicker">Tu destino ideal es</span><h3>' + esc(d.nombre) + "</h3><p>" + esc(d.txt) + "</p>" +
+      '<div class="quiz__tags">' + ans.map(function (a) { return "<span>" + a[2] + " " + esc(a[0]) + "</span>"; }).join("") + "</div>" +
+      '<div class="hero__btns"><a class="btn btn--primary" target="_blank" rel="noopener" href="' + waLink(msg) + '">Quiero mi propuesta para ' + esc(d.nombre) + '</a>' +
+      '<button type="button" class="btn btn--ghost quiz__again">Hacer el test de nuevo</button></div></div></div>';
+    quiz.classList.remove("is-anim"); void quiz.offsetWidth; quiz.classList.add("is-anim");
+  }
+  quiz.addEventListener("click", function (e) {
+    var op = e.target.closest(".quiz__op");
+    if (op) { op.classList.add("is-on"); ans[qi] = QZ[qi].ops[op.dataset.i]; setTimeout(function () { qi++; qi < QZ.length ? drawQ() : drawResult(); }, 260); return; }
+    if (e.target.closest(".quiz__back")) { qi--; drawQ(); return; }
+    if (e.target.closest(".quiz__again")) { qi = 0; ans = []; drawQ(); }
+  });
+  drawQ();
+
   bindWa();
 
   /* ---------- Formulario Armá tu viaje -> WhatsApp ---------- */
   var form = document.getElementById("formViaje");
+  function armarMsg() {
+    var f = form.elements;
+    return "Hola Loytravel! Soy " + (f.nombre.value.trim() || "…") + " y quiero cotizar un viaje:\n" +
+      "• Destino: " + (f.destino.value.trim() || "…") + "\n" +
+      "• Fecha: " + (f.fecha.value.trim() || "a definir") + "\n" +
+      "• Salida desde: " + (f.desde.value.trim() || "Córdoba") + "\n" +
+      "• Pasajeros: " + f.adultos.value + " adultos, " + f.menores.value + " menores\n" +
+      "• Tipo de viaje: " + form.querySelector("[name=tipo]:checked").value + "\n" +
+      "• Pago preferido: " + f.pago.value;
+  }
+  var prev = document.getElementById("waPrev");
+  function pintarPrev() {
+    var h = new Date(), hh = ("0" + h.getHours()).slice(-2) + ":" + ("0" + h.getMinutes()).slice(-2);
+    prev.innerHTML = esc(armarMsg()).replace(/\n/g, "<br>") + '<span class="waprev__time">' + hh + " ✓✓</span>";
+  }
+  form.addEventListener("input", pintarPrev); form.addEventListener("change", pintarPrev); pintarPrev();
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var f = form.elements, ok = true;
@@ -81,14 +168,7 @@
       var bad = !f[n].value.trim(); f[n].classList.toggle("is-bad", bad); if (bad) ok = false;
     });
     if (!ok) { form.querySelector(".is-bad").focus(); return; }
-    var msg = "Hola Loytravel! Soy " + f.nombre.value.trim() + " y quiero cotizar un viaje:\n" +
-      "• Destino: " + f.destino.value.trim() + "\n" +
-      "• Fecha: " + (f.fecha.value.trim() || "a definir") + "\n" +
-      "• Salida desde: " + (f.desde.value.trim() || "Córdoba") + "\n" +
-      "• Pasajeros: " + f.adultos.value + " adultos, " + f.menores.value + " menores\n" +
-      "• Tipo de viaje: " + form.querySelector("[name=tipo]:checked").value + "\n" +
-      "• Pago preferido: " + f.pago.value;
-    window.open(waLink(msg), "_blank", "noopener");
+    window.open(waLink(armarMsg()), "_blank", "noopener");
   });
 
   /* ---------- Dólar BNA del día ---------- */
@@ -110,7 +190,7 @@
   /* ---------- Hero: fotos con movimiento ---------- */
   var slides = document.querySelectorAll(".hero__slide"), si = 0;
   var dots = document.querySelectorAll("#heroDots button"), place = document.getElementById("heroPlace");
-  var places = ["Río de Janeiro · Pan de Azúcar", "Búzios · Costa do Sol", "Río de Janeiro · Cristo Redentor"];
+  var places = [T["hero.p1"], T["hero.p2"], T["hero.p3"]]; place.textContent = places[0];
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches, timer;
   function go(n) {
     slides[si].classList.remove("is-on"); dots[si].classList.remove("is-on");

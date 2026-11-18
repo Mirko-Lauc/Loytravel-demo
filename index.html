@@ -35,6 +35,7 @@
     </a>
     <nav class="nav" id="nav" aria-label="Menú principal">
       <a href="#destinos">Destinos</a>
+      <a href="#test">Test</a>
       <a href="#como">Cómo trabajamos</a>
       <a href="#armatuviaje">Armá tu viaje</a>
       <a href="#promos">Promos</a>
@@ -52,15 +53,15 @@
 <!-- HERO -->
 <section class="hero" id="inicio">
   <div class="hero__media" aria-hidden="true">
-    <div class="hero__slide is-on" style="background-image:url(img/hero-1.jpg)"></div>
-    <div class="hero__slide" style="background-image:url(img/hero-2.jpg)"></div>
-    <div class="hero__slide" style="background-image:url(img/hero-3.jpg)"></div>
+    <div class="hero__slide is-on" data-k-bg="hero.f1" style="background-image:url(img/hero-1.jpg)"></div>
+    <div class="hero__slide" data-k-bg="hero.f2" style="background-image:url(img/hero-2.jpg)"></div>
+    <div class="hero__slide" data-k-bg="hero.f3" style="background-image:url(img/hero-3.jpg)"></div>
   </div>
   <div class="hero__shade"></div>
   <div class="wrap hero__in">
-    <p class="kicker reveal">Temporada Brasil 2026/27</p>
-    <h1 class="hero__title"><span class="line"><span>Tu viaje a Brasil,</span></span><span class="line"><span class="accent">armado a tu medida.</span></span></h1>
-    <p class="hero__lead reveal">Somos una agencia de Córdoba con años de experiencia y destinos que conocemos en persona. Te asesoramos de principio a fin, y te acompañamos durante todo el viaje.</p>
+    <p class="kicker reveal" data-k="hero.kicker">Temporada Brasil 2026/27</p>
+    <h1 class="hero__title"><span class="line"><span data-k="hero.t1">Tu viaje a Brasil,</span></span><span class="line"><span class="accent" data-k="hero.t2">armado a tu medida.</span></span></h1>
+    <p class="hero__lead reveal" data-k="hero.lead">Somos una agencia de Córdoba con años de experiencia y destinos que conocemos en persona. Te asesoramos de principio a fin, y te acompañamos durante todo el viaje.</p>
     <div class="hero__btns reveal">
       <a href="#armatuviaje" class="btn btn--primary">Cotizá tu viaje gratis</a>
       <a href="#" class="btn btn--ghost" data-wa="Hola Loytravel, quiero info para viajar a Brasil">Consultar por WhatsApp</a>
@@ -90,8 +91,8 @@
   <div class="wrap">
     <div class="sec__head reveal">
       <p class="kicker">Destinos</p>
-      <h2>Brasil, como lo soñaste</h2>
-      <p>Buscá tu destino y consultanos. Te armamos el paquete con aéreos, hotel y traslados según tus fechas.</p>
+      <h2 data-k="dest.titulo">Brasil, como lo soñaste</h2>
+      <p data-k="dest.sub">Buscá tu destino y consultanos. Te armamos el paquete con aéreos, hotel y traslados según tus fechas.</p>
     </div>
 
     <div class="search reveal" role="search">
@@ -111,6 +112,18 @@
 
     <div class="grid-dest" id="gridDest"></div>
     <p class="empty" id="empty" hidden>No encontramos ese destino en la lista, pero seguro te lo armamos. <a href="#" data-wa="Hola Loytravel, quiero consultar por un destino que no vi en la web">Consultanos por WhatsApp</a>.</p>
+  </div>
+</section>
+
+<!-- TEST -->
+<section class="sec sec--dark quiz-sec" id="test">
+  <div class="wrap">
+    <div class="sec__head sec__head--center reveal">
+      <p class="kicker">Test de 1 minuto</p>
+      <h2>¿Qué Brasil es para vos?</h2>
+      <p>Respondé 4 preguntas y te recomendamos el destino ideal. Después te armamos la propuesta por WhatsApp.</p>
+    </div>
+    <div class="quiz reveal" id="quiz" aria-live="polite"></div>
   </div>
 </section>
 
@@ -141,6 +154,13 @@
         <li>Paquetes con aéreos, hotel, traslados y asistencia</li>
         <li>Pagás en pesos o dólares, con cuotas con tarjeta</li>
       </ul>
+      <div class="waprev" aria-label="Vista previa del mensaje">
+        <div class="waprev__head"><img src="img/logo.png" alt=""><div><b>Loytravel</b><small>en línea</small></div></div>
+        <div class="waprev__chat">
+          <div class="waprev__bubble" id="waPrev"></div>
+          <span class="waprev__hint">Así le llega tu consulta a Loytravel ✓✓</span>
+        </div>
+      </div>
     </div>
     <form class="form reveal" id="formViaje" novalidate>
       <div class="form__row">
@@ -179,8 +199,8 @@
   <div class="wrap">
     <div class="sec__head reveal">
       <p class="kicker">Promociones del mes</p>
-      <h2>Salidas destacadas de noviembre</h2>
-      <p>Cupos limitados. Consultá el precio actualizado por WhatsApp.</p>
+      <h2 data-k="promos.titulo">Salidas destacadas de noviembre</h2>
+      <p data-k="promos.sub">Cupos limitados. Consultá el precio actualizado por WhatsApp.</p>
     </div>
     <div class="grid-promo" id="gridPromo"></div>
     <p class="demo-note">Promociones de ejemplo: las reemplazamos por las reales de Loytravel.</p>
@@ -190,11 +210,11 @@
 <!-- NOSOTROS -->
 <section class="sec sec--soft" id="nosotros">
   <div class="wrap split split--img">
-    <figure class="split__img reveal"><img src="img/nosotros.jpg" alt="Viajera recorriendo una ciudad" loading="lazy"><figcaption>Foto de ejemplo: va una del equipo de Loytravel</figcaption></figure>
+    <figure class="split__img reveal"><img src="img/nosotros.jpg" data-k-src="nos.foto" alt="Equipo de Loytravel" loading="lazy"><figcaption id="nosCap">Foto de ejemplo: va una del equipo de Loytravel</figcaption></figure>
     <div class="split__txt reveal">
       <p class="kicker">Quiénes somos</p>
-      <h2>Una agencia de Córdoba que te conoce por tu nombre</h2>
-      <p>En Loytravel no vendemos paquetes de catálogo: escuchamos qué viaje querés y lo armamos con vos. Recorrimos en persona los destinos que recomendamos, así que te contamos lo que de verdad conviene.</p>
+      <h2 data-k="nos.titulo">Una agencia de Córdoba que te conoce por tu nombre</h2>
+      <p data-k="nos.texto">En Loytravel no vendemos paquetes de catálogo: escuchamos qué viaje querés y lo armamos con vos. Recorrimos en persona los destinos que recomendamos, así que te contamos lo que de verdad conviene.</p>
       <div class="pillars">
         <div><b>Atención personalizada</b><span>Un asesor te acompaña desde la primera consulta hasta la vuelta.</span></div>
         <div><b>Años de experiencia</b><span>Sabemos resolver cuando algo cambia en el camino.</span></div>
@@ -207,10 +227,10 @@
 
 <!-- BANNER PARALLAX -->
 <section class="banner" aria-label="Brasil te espera">
-  <div class="banner__bg" style="background-image:url(img/hero-2.jpg)"></div>
+  <div class="banner__bg" data-k-bg="banner.foto" style="background-image:url(img/hero-2.jpg)"></div>
   <div class="wrap banner__in reveal">
     <p class="kicker">Temporada de verano</p>
-    <h2>Brasil te está esperando.<br>Asegurá tu lugar antes de que se llenen los cupos.</h2>
+    <h2 data-k="banner.titulo">Brasil te está esperando. Asegurá tu lugar antes de que se llenen los cupos.</h2>
     <a href="#armatuviaje" class="btn btn--primary">Quiero cotizar mi viaje</a>
   </div>
 </section>
@@ -222,7 +242,7 @@
       <p class="kicker">Opiniones de viajeros</p>
       <h2>Lo que cuentan al volver</h2>
     </div>
-    <div class="grid-op">
+    <div class="grid-op" id="gridOp">
       <blockquote class="op reveal"><span class="op__tag">Ejemplo</span><p>"Acá va la opinión real de un cliente de Loytravel, tomada de una captura de WhatsApp o Google."</p><footer>Nombre del cliente · Destino</footer></blockquote>
       <blockquote class="op reveal"><span class="op__tag">Ejemplo</span><p>"Espacio para la segunda opinión real. No publicamos testimonios inventados."</p><footer>Nombre del cliente · Destino</footer></blockquote>
       <blockquote class="op reveal"><span class="op__tag">Ejemplo</span><p>"Espacio para la tercera opinión real, con el permiso del viajero."</p><footer>Nombre del cliente · Destino</footer></blockquote>
@@ -299,9 +319,9 @@
       <p class="kicker">Contacto</p>
       <h2>Vení a conocernos o escribinos</h2>
       <ul class="contact">
-        <li><b>Oficina</b><span>Duarte Quirós 3419, Córdoba</span></li>
-        <li><b>Horarios</b><span>Lunes a viernes de 10 a 13 y de 14 a 18 h</span></li>
-        <li><b>Instagram</b><span>@loytravelgroup</span></li>
+        <li><b>Oficina</b><span data-k="contacto.dir">Duarte Quirós 3419, Córdoba</span></li>
+        <li><b>Horarios</b><span data-k="contacto.horario">Lunes a viernes de 10 a 13 y de 14 a 18 h</span></li>
+        <li><b>Instagram</b><span data-k="contacto.ig">@loytravelgroup</span></li>
         <li><b>Legajo</b><span>13782</span></li>
       </ul>
       <div class="hero__btns">
@@ -324,7 +344,7 @@
       <img src="img/logo.png" alt="Loytravel" class="logo--foot" width="84" height="84" loading="lazy">
       <p>Agencia de viajes · Córdoba, Argentina · Legajo 13782</p>
     </div>
-    <p class="footer__by">Diseño y desarrollo: <a href="https://mirkosistemas.com" target="_blank" rel="noopener">Mirko Sistemas</a></p>
+    <p class="footer__by"><a href="admin.html" class="footer__admin">Panel Loytravel</a> · Diseño y desarrollo: <a href="https://mirkosistemas.com" target="_blank" rel="noopener">Mirko Sistemas</a></p>
   </div>
 </footer>
 

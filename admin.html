@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel Loytravel</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+<link rel="icon" type="image/png" href="img/favicon.png">
+</head>
+<body>
+
+<!-- Ingreso -->
+<section class="login" id="login">
+  <div class="login__card">
+    <img src="img/logo.png" alt="Loytravel" class="login__logo">
+    <h1>Panel Loytravel</h1>
+    <p>Desde acá cambiás fotos, textos, destinos, promociones, notas del blog y opiniones, sin tocar código.</p>
+    <button class="btn btn--primary btn--block" id="enter">Entrar al panel de demostración</button>
+    <small>Demo: en la versión final se entra con usuario y contraseña propios de Loytravel.</small>
+  </div>
+</section>
+
+<!-- Panel -->
+<div class="app" id="app" hidden>
+  <aside class="side">
+    <div class="side__brand"><img src="img/logo.png" alt=""><div><b>Loytravel</b><small>Panel de administración</small></div></div>
+    <nav class="side__nav" id="tabs">
+      <button data-tab="inicio" class="is-on"><span>🏠</span>Resumen</button>
+      <button data-tab="portada"><span>🖼️</span>Portada</button>
+      <button data-tab="destinos"><span>📍</span>Destinos</button>
+      <button data-tab="promos"><span>🔥</span>Promociones</button>
+      <button data-tab="blog"><span>📝</span>Blog</button>
+      <button data-tab="opiniones"><span>⭐</span>Opiniones</button>
+      <button data-tab="nosotros"><span>👥</span>Quiénes somos</button>
+      <button data-tab="contacto"><span>📞</span>Contacto y WhatsApp</button>
+    </nav>
+    <div class="side__foot">
+      <button class="link" id="reset">Restablecer la demo</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="bar">
+      <button class="bar__menu" id="menu" aria-label="Menú">☰</button>
+      <h2 id="tabTitle">Resumen</h2>
+      <div class="bar__actions">
+        <a href="index.html" target="_blank" rel="noopener" class="btn btn--ghost">Ver la web ↗</a>
+        <button class="btn btn--primary" id="save">Guardar cambios</button>
+      </div>
+    </header>
+    <div class="demo-banner">Modo demostración: los cambios se guardan en este navegador para que los veas al instante en la web. En la versión final se publican para todos los visitantes.</div>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<input type="file" id="file" accept="image/*" hidden>
+
+<script src="js/data.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

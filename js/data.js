@@ -8,6 +8,32 @@
 // WhatsApp de Loytravel: 351 226-5069
 window.LOY_WA = "5493512265069";
 
+// Textos y fotos generales (editables desde el panel)
+window.LOY_TEXTOS = {
+  "hero.kicker": "Temporada Brasil 2026/27",
+  "hero.t1": "Tu viaje a Brasil,",
+  "hero.t2": "armado a tu medida.",
+  "hero.lead": "Somos una agencia de Córdoba con años de experiencia y destinos que conocemos en persona. Te asesoramos de principio a fin, y te acompañamos durante todo el viaje.",
+  "hero.f1": "img/hero-1.jpg", "hero.p1": "Río de Janeiro · Pan de Azúcar",
+  "hero.f2": "img/hero-2.jpg", "hero.p2": "Búzios · Costa do Sol",
+  "hero.f3": "img/hero-3.jpg", "hero.p3": "Río de Janeiro · Cristo Redentor",
+  "dest.titulo": "Brasil, como lo soñaste",
+  "dest.sub": "Buscá tu destino y consultanos. Te armamos el paquete con aéreos, hotel y traslados según tus fechas.",
+  "promos.titulo": "Salidas destacadas de noviembre",
+  "promos.sub": "Cupos limitados. Consultá el precio actualizado por WhatsApp.",
+  "nos.titulo": "Una agencia de Córdoba que te conoce por tu nombre",
+  "nos.texto": "En Loytravel no vendemos paquetes de catálogo: escuchamos qué viaje querés y lo armamos con vos. Recorrimos en persona los destinos que recomendamos, así que te contamos lo que de verdad conviene.",
+  "nos.foto": "img/nosotros.jpg",
+  "banner.titulo": "Brasil te está esperando. Asegurá tu lugar antes de que se llenen los cupos.",
+  "banner.foto": "img/hero-2.jpg",
+  "contacto.dir": "Duarte Quirós 3419, Córdoba",
+  "contacto.horario": "Lunes a viernes de 10 a 13 y de 14 a 18 h",
+  "contacto.ig": "@loytravelgroup"
+};
+
+// Opiniones reales de viajeros (vacío = se muestran los espacios de ejemplo)
+window.LOY_OPINIONES = [];
+
 // Etiquetas: playa · familia · pareja · ciudad · all
 window.LOY_DESTINOS = [
   { nombre: "Río de Janeiro", zona: "Sudeste", img: "img/rio.jpg", tags: ["ciudad", "playa", "pareja"],
