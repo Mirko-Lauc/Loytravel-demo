@@ -5,8 +5,8 @@
    ========================================================= */
 
 // Número de WhatsApp (formato internacional, sin + ni espacios)
-// DEMO: va al número de Mirko Sistemas. Final: 5493512265069 (Loytravel).
-window.LOY_WA = "5493875461860";
+// WhatsApp de Loytravel: 351 226-5069
+window.LOY_WA = "5493512265069";
 
 // Etiquetas: playa · familia · pareja · ciudad · all
 window.LOY_DESTINOS = [
