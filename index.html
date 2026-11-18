@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loytravel · Agencia de viajes en Córdoba</title>
+<meta name="description" content="Loytravel, agencia de viajes en Córdoba. Viajes a Brasil y a medida, con atención personalizada. Legajo 13782. Cotizá tu viaje por WhatsApp.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#111111">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Questrial&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='700' font-size='34' text-anchor='middle' fill='%23FF9900'%3EL%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- Barra superior: dólar del día -->
+<div class="topbar">
+  <div class="wrap topbar__in">
+    <span class="dolar" id="dolar" aria-live="polite">
+      <span class="dolar__dot"></span>
+      Dólar BNA hoy: <b id="dolarCompra">…</b> compra · <b id="dolarVenta">…</b> venta
+    </span>
+    <span class="topbar__legajo">Agencia habilitada · Legajo 13782</span>
+  </div>
+</div>
+
+<header class="header" id="header">
+  <div class="wrap header__in">
+    <a href="#inicio" class="logo" aria-label="Loytravel, inicio">
+      <!-- Reemplazar por el logo oficial: img/logo.svg -->
+      <span class="logo__mark">L</span><span class="logo__txt">loy<b>travel</b></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Menú principal">
+      <a href="#destinos">Destinos</a>
+      <a href="#armatuviaje">Armá tu viaje</a>
+      <a href="#promos">Promos</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#blog">Blog</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a class="btn btn--wa btn--sm header__cta" data-wa="Hola Loytravel, quiero consultar por un viaje" href="#">WhatsApp</a>
+    <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero__media" aria-hidden="true">
+    <div class="hero__slide is-on" style="background-image:url(img/hero-1.jpg)"></div>
+    <div class="hero__slide" style="background-image:url(img/hero-2.jpg)"></div>
+    <div class="hero__slide" style="background-image:url(img/hero-3.jpg)"></div>
+  </div>
+  <div class="hero__shade"></div>
+  <div class="wrap hero__in">
+    <p class="kicker reveal">Temporada Brasil 2026/27</p>
+    <h1 class="reveal">Tu viaje a Brasil,<br><span>armado a tu medida.</span></h1>
+    <p class="hero__lead reveal">Somos una agencia de Córdoba con años de experiencia y destinos que conocemos en persona. Te asesoramos de principio a fin, y te acompañamos durante todo el viaje.</p>
+    <div class="hero__btns reveal">
+      <a href="#armatuviaje" class="btn btn--primary">Cotizá tu viaje gratis</a>
+      <a href="#" class="btn btn--ghost" data-wa="Hola Loytravel, quiero info para viajar a Brasil">Consultar por WhatsApp</a>
+    </div>
+    <ul class="hero__trust reveal">
+      <li><b>Legajo 13782</b><span>Agencia habilitada</span></li>
+      <li><b>Atención</b><span>personalizada</span></li>
+      <li><b>Cuotas</b><span>con tarjeta de crédito</span></li>
+    </ul>
+  </div>
+  <a href="#destinos" class="hero__down" aria-label="Ver destinos"></a>
+</section>
+
+<!-- DESTINOS + BUSCADOR -->
+<section class="sec" id="destinos">
+  <div class="wrap">
+    <div class="sec__head reveal">
+      <p class="kicker">Destinos</p>
+      <h2>Brasil, como lo soñaste</h2>
+      <p>Buscá tu destino y consultanos. Te armamos el paquete con aéreos, hotel y traslados según tus fechas.</p>
+    </div>
+
+    <div class="search reveal" role="search">
+      <label class="search__box">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <input type="search" id="q" placeholder="Buscá un destino: Río, Florianópolis, Búzios…" autocomplete="off">
+      </label>
+      <div class="chips" id="chips">
+        <button class="chip is-on" data-f="todos">Todos</button>
+        <button class="chip" data-f="playa">Playa</button>
+        <button class="chip" data-f="familia">En familia</button>
+        <button class="chip" data-f="pareja">Luna de miel</button>
+        <button class="chip" data-f="ciudad">Ciudad y cultura</button>
+        <button class="chip" data-f="all">All inclusive</button>
+      </div>
+    </div>
+
+    <div class="grid-dest" id="gridDest"></div>
+    <p class="empty" id="empty" hidden>No encontramos ese destino en la lista, pero seguro te lo armamos. <a href="#" data-wa="Hola Loytravel, quiero consultar por un destino que no vi en la web">Consultanos por WhatsApp</a>.</p>
+  </div>
+</section>
+
+<!-- ARMÁ TU VIAJE -->
+<section class="sec sec--dark" id="armatuviaje">
+  <div class="wrap split">
+    <div class="split__txt reveal">
+      <p class="kicker">Viajes a medida</p>
+      <h2>Armá tu viaje en 1 minuto</h2>
+      <p>Contanos a dónde, cuándo y con quién querés viajar. Un asesor te responde por WhatsApp con opciones pensadas para vos.</p>
+      <ul class="checks">
+        <li>Sin compromiso y sin costo</li>
+        <li>Paquetes con aéreos, hotel, traslados y asistencia</li>
+        <li>Pagás en pesos o dólares, con cuotas con tarjeta</li>
+      </ul>
+    </div>
+    <form class="form reveal" id="formViaje" novalidate>
+      <div class="form__row">
+        <label>Destino<input name="destino" list="listDest" placeholder="Ej.: Florianópolis" required></label>
+        <datalist id="listDest"></datalist>
+      </div>
+      <div class="form__row form__row--2">
+        <label>¿Cuándo?<input name="fecha" placeholder="Ej.: enero, 10 noches"></label>
+        <label>Salida desde<input name="desde" value="Córdoba"></label>
+      </div>
+      <div class="form__row form__row--2">
+        <label>Adultos<select name="adultos"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5+</option></select></label>
+        <label>Menores<select name="menores"><option selected>0</option><option>1</option><option>2</option><option>3</option><option>4+</option></select></label>
+      </div>
+      <div class="form__row">
+        <span class="lbl">Tipo de viaje</span>
+        <div class="pills">
+          <label><input type="radio" name="tipo" value="Playa y descanso" checked><span>Playa</span></label>
+          <label><input type="radio" name="tipo" value="En familia"><span>Familia</span></label>
+          <label><input type="radio" name="tipo" value="Luna de miel"><span>Pareja</span></label>
+          <label><input type="radio" name="tipo" value="All inclusive"><span>All inclusive</span></label>
+        </div>
+      </div>
+      <div class="form__row form__row--2">
+        <label>Tu nombre<input name="nombre" required placeholder="Nombre"></label>
+        <label>Pago preferido<select name="pago"><option>Tarjeta en cuotas</option><option>Transferencia</option><option>Efectivo</option><option>Dólares</option></select></label>
+      </div>
+      <button class="btn btn--primary btn--block" type="submit">Enviar consulta por WhatsApp</button>
+      <p class="form__note">Se abre WhatsApp con tu consulta ya escrita. Solo tocás enviar.</p>
+    </form>
+  </div>
+</section>
+
+<!-- PROMOS -->
+<section class="sec" id="promos">
+  <div class="wrap">
+    <div class="sec__head reveal">
+      <p class="kicker">Promociones del mes</p>
+      <h2>Salidas destacadas de noviembre</h2>
+      <p>Cupos limitados. Consultá el precio actualizado por WhatsApp.</p>
+    </div>
+    <div class="grid-promo" id="gridPromo"></div>
+    <p class="demo-note">Promociones de ejemplo: las reemplazamos por las reales de Loytravel.</p>
+  </div>
+</section>
+
+<!-- NOSOTROS -->
+<section class="sec sec--soft" id="nosotros">
+  <div class="wrap split split--img">
+    <figure class="split__img reveal"><img src="img/nosotros.jpg" alt="Viajera recorriendo una ciudad" loading="lazy"><figcaption>Foto de ejemplo: va una del equipo de Loytravel</figcaption></figure>
+    <div class="split__txt reveal">
+      <p class="kicker">Quiénes somos</p>
+      <h2>Una agencia de Córdoba que te conoce por tu nombre</h2>
+      <p>En Loytravel no vendemos paquetes de catálogo: escuchamos qué viaje querés y lo armamos con vos. Recorrimos en persona los destinos que recomendamos, así que te contamos lo que de verdad conviene.</p>
+      <div class="pillars">
+        <div><b>Atención personalizada</b><span>Un asesor te acompaña desde la primera consulta hasta la vuelta.</span></div>
+        <div><b>Años de experiencia</b><span>Sabemos resolver cuando algo cambia en el camino.</span></div>
+        <div><b>Destinos conocidos</b><span>Te recomendamos lo que vimos con nuestros propios ojos.</span></div>
+      </div>
+      <p class="legajo">Agencia de viajes habilitada · <b>Legajo 13782</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- OPINIONES -->
+<section class="sec" id="opiniones">
+  <div class="wrap">
+    <div class="sec__head reveal">
+      <p class="kicker">Opiniones de viajeros</p>
+      <h2>Lo que cuentan al volver</h2>
+    </div>
+    <div class="grid-op">
+      <blockquote class="op reveal"><span class="op__tag">Ejemplo</span><p>"Acá va la opinión real de un cliente de Loytravel, tomada de una captura de WhatsApp o Google."</p><footer>Nombre del cliente · Destino</footer></blockquote>
+      <blockquote class="op reveal"><span class="op__tag">Ejemplo</span><p>"Espacio para la segunda opinión real. No publicamos testimonios inventados."</p><footer>Nombre del cliente · Destino</footer></blockquote>
+      <blockquote class="op reveal"><span class="op__tag">Ejemplo</span><p>"Espacio para la tercera opinión real, con el permiso del viajero."</p><footer>Nombre del cliente · Destino</footer></blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section class="sec sec--dark sec--tight" id="galeria">
+  <div class="wrap">
+    <div class="sec__head reveal">
+      <p class="kicker">Galería</p>
+      <h2>Postales de Brasil</h2>
+    </div>
+  </div>
+  <div class="gallery" id="gallery">
+    <img src="img/cristo.jpg" alt="Cristo Redentor entre montañas" loading="lazy">
+    <img src="img/buzios.jpg" alt="Playa de agua turquesa con lanchas" loading="lazy">
+    <img src="img/salvador.jpg" alt="Casas coloniales coloridas" loading="lazy">
+    <img src="img/blog-2.jpg" alt="Teleférico del Pan de Azúcar" loading="lazy">
+    <img src="img/resort.jpg" alt="Piscina de resort con palmeras" loading="lazy">
+    <img src="img/floripa.jpg" alt="Playa con palmeras y sombrillas" loading="lazy">
+  </div>
+</section>
+
+<!-- BLOG -->
+<section class="sec" id="blog">
+  <div class="wrap">
+    <div class="sec__head reveal">
+      <p class="kicker">Blog de viajes</p>
+      <h2>Consejos para tu próximo viaje</h2>
+    </div>
+    <div class="grid-blog" id="gridBlog"></div>
+    <p class="demo-note">Notas de ejemplo: Loytravel las reemplaza o las carga desde su planilla.</p>
+  </div>
+</section>
+
+<!-- FAQ + PAGOS -->
+<section class="sec sec--soft" id="faq">
+  <div class="wrap split split--top">
+    <div class="reveal">
+      <p class="kicker">Preguntas frecuentes</p>
+      <h2>Antes de viajar</h2>
+      <div class="faq">
+        <details><summary>¿Qué documentación necesito para viajar a Brasil?</summary><p>Los argentinos pueden ingresar con DNI vigente (tarjeta) o pasaporte. Los menores necesitan además la documentación de autorización si no viajan con ambos padres. Te lo confirmamos según tu caso.</p></details>
+        <details><summary>¿Por qué no publican precios?</summary><p>Los precios cambian según la fecha, la cantidad de noches y el cupo aéreo. Preferimos cotizarte el precio real del día por WhatsApp, sin sorpresas.</p></details>
+        <details><summary>¿Puedo pagar en cuotas?</summary><p>Sí, con tarjeta de crédito. También aceptamos efectivo, transferencia y dólares.</p></details>
+        <details><summary>¿Incluyen asistencia al viajero?</summary><p>Te recomendamos y cotizamos la asistencia al viajero adecuada para tu destino y tu edad.</p></details>
+        <details><summary>¿Puedo ir a la oficina?</summary><p>Claro. Estamos en Duarte Quirós 3419, Córdoba, de lunes a viernes de 10 a 13 y de 14 a 18 h.</p></details>
+      </div>
+    </div>
+    <div class="pay reveal" id="pagos">
+      <p class="kicker">Formas de pago</p>
+      <h3>Pagá como te quede más cómodo</h3>
+      <ul class="pay__list">
+        <li><span>💳</span>Tarjeta de crédito</li>
+        <li><span>🏦</span>Transferencia</li>
+        <li><span>💵</span>Efectivo</li>
+        <li><span>🇺🇸</span>Dólares</li>
+      </ul>
+      <p class="pay__dolar">Cotización del dólar BNA de hoy: <b id="dolarVenta2">…</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="sec sec--dark" id="contacto">
+  <div class="wrap split">
+    <div class="reveal">
+      <p class="kicker">Contacto</p>
+      <h2>Vení a conocernos o escribinos</h2>
+      <ul class="contact">
+        <li><b>Oficina</b><span>Duarte Quirós 3419, Córdoba</span></li>
+        <li><b>Horarios</b><span>Lunes a viernes de 10 a 13 y de 14 a 18 h</span></li>
+        <li><b>Instagram</b><span>@loytravelgroup</span></li>
+        <li><b>Legajo</b><span>13782</span></li>
+      </ul>
+      <div class="hero__btns">
+        <a href="#" class="btn btn--wa" data-wa="Hola Loytravel, quiero hacer una consulta">Escribinos por WhatsApp</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Duarte+Quir%C3%B3s+3419%2C+C%C3%B3rdoba%2C+Argentina" class="btn btn--ghost" target="_blank" rel="noopener">Cómo llegar</a>
+      </div>
+    </div>
+    <a class="map reveal" href="https://www.google.com/maps/search/?api=1&query=Duarte+Quir%C3%B3s+3419%2C+C%C3%B3rdoba%2C+Argentina" target="_blank" rel="noopener" aria-label="Abrir ubicación en Google Maps">
+      <span class="map__pin"></span>
+      <span class="map__label">Duarte Quirós 3419<br><small>Tocá para abrir en Google Maps</small></span>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__in">
+    <div>
+      <span class="logo logo--foot"><span class="logo__mark">L</span><span class="logo__txt">loy<b>travel</b></span></span>
+      <p>Agencia de viajes · Córdoba, Argentina · Legajo 13782</p>
+    </div>
+    <p class="footer__by">Diseño y desarrollo: <a href="https://mirkosistemas.com" target="_blank" rel="noopener">Mirko Sistemas</a></p>
+  </div>
+</footer>
+
+<a href="#" class="wa-float" data-wa="Hola Loytravel, quiero consultar por un viaje" aria-label="Escribir por WhatsApp">
+  <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3Zm0 23.7c-2 0-4-.6-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.7 10.7 0 1 1 16 26.7Zm5.9-8c-.3-.2-1.9-1-2.2-1-.3-.1-.5-.2-.7.1l-1 1.2c-.2.2-.4.3-.7.1a8.8 8.8 0 0 1-4.4-3.8c-.3-.6.3-.5 1-1.7.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.7 5.8 5.1 2.2.9 3 1 4.1.8.7-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5l-.6-.3Z"/></svg>
+</a>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

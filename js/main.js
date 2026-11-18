@@ -1,0 +1,129 @@
+(function () {
+  "use strict";
+  var WA = window.LOY_WA;
+  var waLink = function (msg) { return "https://wa.me/" + WA + "?text=" + encodeURIComponent(msg); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+
+  function bindWa(root) {
+    (root || document).querySelectorAll("[data-wa]").forEach(function (a) {
+      a.href = waLink(a.getAttribute("data-wa"));
+      a.target = "_blank"; a.rel = "noopener";
+    });
+  }
+
+  /* ---------- Destinos + buscador ---------- */
+  var grid = document.getElementById("gridDest");
+  var list = document.getElementById("listDest");
+  var D = window.LOY_DESTINOS;
+  grid.innerHTML = D.map(function (d, i) {
+    return '<article class="dest reveal' + (d.destacado ? " dest--big" : "") + '" data-i="' + i + '">' +
+      '<div class="dest__img"><img src="' + d.img + '" alt="' + esc(d.nombre) + '" loading="lazy"><span class="dest__zona">' + esc(d.zona) + "</span></div>" +
+      '<div class="dest__body"><h3>' + esc(d.nombre) + "</h3><p>" + esc(d.txt) + "</p>" +
+      '<a class="dest__cta" href="#" data-wa="Hola Loytravel, quiero consultar por un viaje a ' + esc(d.nombre) + '">Consultar <span>→</span></a></div></article>';
+  }).join("");
+  list.innerHTML = D.map(function (d) { return '<option value="' + esc(d.nombre) + '">'; }).join("");
+
+  var q = document.getElementById("q"), chips = document.getElementById("chips"), empty = document.getElementById("empty");
+  var filtro = "todos";
+  var norm = function (s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); };
+  function filtrar() {
+    var t = norm(q.value.trim()), visibles = 0;
+    grid.querySelectorAll(".dest").forEach(function (el) {
+      var d = D[el.dataset.i];
+      var okT = !t || norm(d.nombre + " " + d.zona + " " + d.txt).indexOf(t) > -1;
+      var okF = filtro === "todos" || d.tags.indexOf(filtro) > -1;
+      el.hidden = !(okT && okF);
+      if (!el.hidden) { visibles++; el.classList.add("is-in"); }
+    });
+    empty.hidden = visibles > 0;
+  }
+  q.addEventListener("input", filtrar);
+  chips.addEventListener("click", function (e) {
+    var b = e.target.closest(".chip"); if (!b) return;
+    chips.querySelectorAll(".chip").forEach(function (c) { c.classList.toggle("is-on", c === b); });
+    filtro = b.dataset.f; filtrar();
+  });
+
+  /* ---------- Promos y blog ---------- */
+  document.getElementById("gridPromo").innerHTML = window.LOY_PROMOS.map(function (p) {
+    return '<article class="promo reveal"><img src="' + p.img + '" alt="" loading="lazy"><div class="promo__body">' +
+      '<span class="promo__tag">' + esc(p.etiqueta) + "</span><h3>" + esc(p.titulo) + "</h3><p>" + esc(p.detalle) + "</p>" +
+      '<a href="#" class="btn btn--primary btn--sm" data-wa="Hola Loytravel, quiero el precio de la promo: ' + esc(p.titulo) + '">Consultar precio</a></div></article>';
+  }).join("");
+
+  document.getElementById("gridBlog").innerHTML = window.LOY_BLOG.map(function (b) {
+    return '<article class="post reveal"><div class="post__img"><img src="' + b.img + '" alt="" loading="lazy"></div>' +
+      '<div class="post__body"><span class="post__date">' + esc(b.fecha) + "</span><h3>" + esc(b.titulo) + "</h3><p>" + esc(b.txt) + "</p>" +
+      '<a href="#" class="dest__cta" data-wa="Hola Loytravel, leí la nota &quot;' + esc(b.titulo) + '&quot; y quiero consultar">Quiero viajar <span>→</span></a></div></article>';
+  }).join("");
+
+  bindWa();
+
+  /* ---------- Formulario Armá tu viaje -> WhatsApp ---------- */
+  var form = document.getElementById("formViaje");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = form.elements, ok = true;
+    ["destino", "nombre"].forEach(function (n) {
+      var bad = !f[n].value.trim(); f[n].classList.toggle("is-bad", bad); if (bad) ok = false;
+    });
+    if (!ok) { form.querySelector(".is-bad").focus(); return; }
+    var msg = "Hola Loytravel! Soy " + f.nombre.value.trim() + " y quiero cotizar un viaje:\n" +
+      "• Destino: " + f.destino.value.trim() + "\n" +
+      "• Fecha: " + (f.fecha.value.trim() || "a definir") + "\n" +
+      "• Salida desde: " + (f.desde.value.trim() || "Córdoba") + "\n" +
+      "• Pasajeros: " + f.adultos.value + " adultos, " + f.menores.value + " menores\n" +
+      "• Tipo de viaje: " + form.querySelector("[name=tipo]:checked").value + "\n" +
+      "• Pago preferido: " + f.pago.value;
+    window.open(waLink(msg), "_blank", "noopener");
+  });
+
+  /* ---------- Dólar BNA del día ---------- */
+  var fmt = function (n) { return "$" + Number(n).toLocaleString("es-AR", { maximumFractionDigits: 2 }); };
+  fetch("https://dolarapi.com/v1/dolares/oficial")
+    .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+    .then(function (d) {
+      document.getElementById("dolarCompra").textContent = fmt(d.compra);
+      document.getElementById("dolarVenta").textContent = fmt(d.venta);
+      document.getElementById("dolarVenta2").textContent = fmt(d.venta) + " (venta)";
+      document.getElementById("dolar").classList.add("is-ok");
+    })
+    .catch(function () {
+      document.getElementById("dolar").innerHTML = 'Consultá la cotización del dólar del día <a href="#" data-wa="Hola Loytravel, ¿a cuánto toman el dólar hoy?">por WhatsApp</a>';
+      document.getElementById("dolarVenta2").textContent = "consultala por WhatsApp";
+      bindWa(document.getElementById("dolar"));
+    });
+
+  /* ---------- Hero: fotos con movimiento ---------- */
+  var slides = document.querySelectorAll(".hero__slide"), si = 0;
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    setInterval(function () {
+      slides[si].classList.remove("is-on");
+      si = (si + 1) % slides.length;
+      slides[si].classList.add("is-on");
+    }, 6000);
+  }
+
+  /* ---------- Header, menú y animaciones ---------- */
+  var header = document.getElementById("header");
+  var onScroll = function () { header.classList.toggle("is-solid", scrollY > 40); };
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  var burger = document.getElementById("burger"), nav = document.getElementById("nav");
+  burger.addEventListener("click", function () {
+    var open = document.body.classList.toggle("menu-open");
+    burger.setAttribute("aria-expanded", open);
+  });
+  nav.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") { document.body.classList.remove("menu-open"); burger.setAttribute("aria-expanded", false); }
+  });
+
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("is-in"); io.unobserve(en.target); } });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+  } else {
+    document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("is-in"); });
+  }
+})();
