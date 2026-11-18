@@ -51,11 +51,24 @@
       '<a href="#" class="btn btn--primary btn--sm" data-wa="Hola Loytravel, quiero el precio de la promo: ' + esc(p.titulo) + '">Consultar precio</a></div></article>';
   }).join("");
 
-  document.getElementById("gridBlog").innerHTML = window.LOY_BLOG.map(function (b) {
+  document.getElementById("gridBlog").innerHTML = window.LOY_BLOG.map(function (b, i) {
     return '<article class="post reveal"><div class="post__img"><img src="' + b.img + '" alt="" loading="lazy"></div>' +
       '<div class="post__body"><span class="post__date">' + esc(b.fecha) + "</span><h3>" + esc(b.titulo) + "</h3><p>" + esc(b.txt) + "</p>" +
-      '<a href="#" class="dest__cta" data-wa="Hola Loytravel, leí la nota &quot;' + esc(b.titulo) + '&quot; y quiero consultar">Quiero viajar <span>→</span></a></div></article>';
+      '<button type="button" class="post__more" data-post="' + i + '">Leer nota <span>→</span></button></div></article>';
   }).join("");
+
+  var modal = document.getElementById("postModal");
+  document.getElementById("gridBlog").addEventListener("click", function (e) {
+    var bt = e.target.closest("[data-post]"); if (!bt) return;
+    var b = window.LOY_BLOG[bt.dataset.post];
+    modal.querySelector(".modal__body").innerHTML =
+      '<img src="' + b.img + '" alt=""><div class="modal__txt"><span class="post__date">' + esc(b.fecha) + "</span><h3>" + esc(b.titulo) + "</h3>" +
+      b.cuerpo.map(function (t) { return "<p>" + esc(t) + "</p>"; }).join("") +
+      '<a href="#" class="btn btn--primary" data-wa="Hola Loytravel, leí la nota &quot;' + esc(b.titulo) + '&quot; y quiero consultar">Quiero viajar</a></div>';
+    bindWa(modal); modal.showModal(); document.body.style.overflow = "hidden";
+  });
+  modal.addEventListener("close", function () { document.body.style.overflow = ""; });
+  modal.addEventListener("click", function (e) { if (e.target === modal || e.target.closest(".modal__close")) modal.close(); });
 
   bindWa();
 

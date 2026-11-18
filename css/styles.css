@@ -373,3 +373,17 @@ h3{font-size:1.2rem}
   .marquee__track,.gallery__track,.wa-float::before{animation:none}
   .sec__head h2::after{transform:scaleX(1);transition:none}
 }
+
+/* Nota del blog */
+.post__more{align-self:flex-start;background:none;border:0;padding:0;cursor:pointer;font:700 .88rem var(--ui);color:var(--naranja-osc)}
+.post__more span{display:inline-block;transition:transform .3s var(--ease)}
+.post__more:hover span{transform:translateX(6px)}
+.modal{border:0;padding:0;border-radius:22px;width:min(680px,100% - 32px);max-height:88vh;margin:auto;overflow:auto;box-shadow:0 40px 100px rgba(0,0,0,.5)}
+.modal::backdrop{background:rgba(10,10,10,.7);backdrop-filter:blur(4px)}
+.modal[open]{animation:pop .4s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.97)}}
+.modal img{width:100%;height:260px;object-fit:cover}
+.modal__txt{padding:1.6rem 1.6rem 2rem;display:grid;gap:.9rem;justify-items:start}
+.modal__txt h3{font-size:1.6rem;font-weight:400}
+.modal__txt p{color:var(--texto)}
+.modal__close{position:sticky;top:12px;float:right;margin:12px 12px -56px 0;width:44px;height:44px;border-radius:50%;border:0;background:rgba(17,17,17,.75);color:#fff;font-size:1.6rem;cursor:pointer;z-index:2}
