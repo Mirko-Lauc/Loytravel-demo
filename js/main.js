@@ -16,10 +16,10 @@
   var list = document.getElementById("listDest");
   var D = window.LOY_DESTINOS;
   grid.innerHTML = D.map(function (d, i) {
-    return '<article class="dest reveal' + (d.destacado ? " dest--big" : "") + '" data-i="' + i + '">' +
-      '<div class="dest__img"><img src="' + d.img + '" alt="' + esc(d.nombre) + '" loading="lazy"><span class="dest__zona">' + esc(d.zona) + "</span></div>" +
+    return '<a href="#" class="dest reveal' + (d.destacado ? " dest--big" : "") + '" data-i="' + i + '" data-wa="Hola Loytravel, quiero consultar por un viaje a ' + esc(d.nombre) + '">' +
+      '<img src="' + d.img + '" alt="' + esc(d.nombre) + '" loading="lazy"><span class="dest__zona">' + esc(d.zona) + "</span>" +
       '<div class="dest__body"><h3>' + esc(d.nombre) + "</h3><p>" + esc(d.txt) + "</p>" +
-      '<a class="dest__cta" href="#" data-wa="Hola Loytravel, quiero consultar por un viaje a ' + esc(d.nombre) + '">Consultar <span>→</span></a></div></article>';
+      '<span class="dest__cta">Consultar por WhatsApp <span>→</span></span></div></a>';
   }).join("");
   list.innerHTML = D.map(function (d) { return '<option value="' + esc(d.nombre) + '">'; }).join("");
 
@@ -96,12 +96,48 @@
 
   /* ---------- Hero: fotos con movimiento ---------- */
   var slides = document.querySelectorAll(".hero__slide"), si = 0;
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    setInterval(function () {
-      slides[si].classList.remove("is-on");
-      si = (si + 1) % slides.length;
-      slides[si].classList.add("is-on");
-    }, 6000);
+  var dots = document.querySelectorAll("#heroDots button"), place = document.getElementById("heroPlace");
+  var places = ["Río de Janeiro · Pan de Azúcar", "Búzios · Costa do Sol", "Río de Janeiro · Cristo Redentor"];
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches, timer;
+  function go(n) {
+    slides[si].classList.remove("is-on"); dots[si].classList.remove("is-on");
+    si = n; slides[si].classList.add("is-on"); dots[si].classList.add("is-on");
+    place.classList.remove("is-in"); void place.offsetWidth; place.textContent = places[si]; place.classList.add("is-in");
+  }
+  function auto() { clearInterval(timer); if (!reduce) timer = setInterval(function () { go((si + 1) % slides.length); }, 6500); }
+  dots.forEach(function (d, i) { d.addEventListener("click", function () { go(i); auto(); }); });
+  auto();
+  requestAnimationFrame(function () { document.body.classList.add("is-loaded"); });
+
+  /* ---------- Parallax y barra de progreso ---------- */
+  var heroMedia = document.querySelector(".hero__media"), heroIn = document.querySelector(".hero__in");
+  var bannerBg = document.querySelector(".banner__bg"), banner = document.querySelector(".banner");
+  var bar = document.getElementById("progress"), ticking = false;
+  function frame() {
+    var y = scrollY, h = innerHeight;
+    bar.style.transform = "scaleX(" + (y / (document.documentElement.scrollHeight - h)) + ")";
+    if (!reduce) {
+      if (y < h) { heroMedia.style.transform = "translate3d(0," + y * 0.35 + "px,0)"; heroIn.style.transform = "translate3d(0," + y * 0.15 + "px,0)"; heroIn.style.opacity = 1 - y / (h * 0.9); }
+      var r = banner.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < h) {
+        var prog = (r.top + r.height / 2 - h / 2) / (h / 2 + r.height / 2); // -1 a 1
+        bannerBg.style.transform = "translate3d(0," + (-prog * r.height * 0.18) + "px,0)";
+      }
+    }
+    ticking = false;
+  }
+  addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }, { passive: true });
+  frame();
+
+  /* ---------- Tarjetas con inclinación suave (solo mouse) ---------- */
+  if (matchMedia("(hover: hover) and (pointer: fine)").matches && !reduce) {
+    document.querySelectorAll(".dest, .promo").forEach(function (c) {
+      c.addEventListener("mousemove", function (e) {
+        var b = c.getBoundingClientRect(), x = (e.clientX - b.left) / b.width - 0.5, yy = (e.clientY - b.top) / b.height - 0.5;
+        c.style.transform = "perspective(900px) rotateY(" + x * 6 + "deg) rotateX(" + -yy * 6 + "deg) translateY(-6px)";
+      });
+      c.addEventListener("mouseleave", function () { c.style.transform = ""; });
+    });
   }
 
   /* ---------- Header, menú y animaciones ---------- */

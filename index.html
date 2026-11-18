@@ -9,11 +9,12 @@
 <meta name="theme-color" content="#111111">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Questrial&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='700' font-size='34' text-anchor='middle' fill='%23FF9900'%3EL%3C/text%3E%3C/svg%3E">
 </head>
 <body>
+<div class="progress" id="progress"></div>
 
 <!-- Barra superior: dólar del día -->
 <div class="topbar">
@@ -34,6 +35,7 @@
     </a>
     <nav class="nav" id="nav" aria-label="Menú principal">
       <a href="#destinos">Destinos</a>
+      <a href="#como">Cómo trabajamos</a>
       <a href="#armatuviaje">Armá tu viaje</a>
       <a href="#promos">Promos</a>
       <a href="#nosotros">Nosotros</a>
@@ -57,7 +59,7 @@
   <div class="hero__shade"></div>
   <div class="wrap hero__in">
     <p class="kicker reveal">Temporada Brasil 2026/27</p>
-    <h1 class="reveal">Tu viaje a Brasil,<br><span>armado a tu medida.</span></h1>
+    <h1 class="hero__title"><span class="line"><span>Tu viaje a Brasil,</span></span><span class="line"><span class="accent">armado a tu medida.</span></span></h1>
     <p class="hero__lead reveal">Somos una agencia de Córdoba con años de experiencia y destinos que conocemos en persona. Te asesoramos de principio a fin, y te acompañamos durante todo el viaje.</p>
     <div class="hero__btns reveal">
       <a href="#armatuviaje" class="btn btn--primary">Cotizá tu viaje gratis</a>
@@ -69,8 +71,19 @@
       <li><b>Cuotas</b><span>con tarjeta de crédito</span></li>
     </ul>
   </div>
+  <div class="hero__meta">
+    <span class="hero__place" id="heroPlace">Río de Janeiro · Pan de Azúcar</span>
+    <div class="hero__dots" id="heroDots"><button class="is-on" aria-label="Foto 1"></button><button aria-label="Foto 2"></button><button aria-label="Foto 3"></button></div>
+  </div>
   <a href="#destinos" class="hero__down" aria-label="Ver destinos"></a>
 </section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>Río de Janeiro</span><i>✦</i><span>Florianópolis</span><i>✦</i><span>Búzios</span><i>✦</i><span>Porto de Galinhas</span><i>✦</i><span>Maceió</span><i>✦</i><span>Salvador de Bahía</span><i>✦</i><span>Costa do Sauípe</span><i>✦</i><span>Cruceros</span><i>✦</i>
+    <span>Río de Janeiro</span><i>✦</i><span>Florianópolis</span><i>✦</i><span>Búzios</span><i>✦</i><span>Porto de Galinhas</span><i>✦</i><span>Maceió</span><i>✦</i><span>Salvador de Bahía</span><i>✦</i><span>Costa do Sauípe</span><i>✦</i><span>Cruceros</span><i>✦</i>
+  </div>
+</div>
 
 <!-- DESTINOS + BUSCADOR -->
 <section class="sec" id="destinos">
@@ -98,6 +111,21 @@
 
     <div class="grid-dest" id="gridDest"></div>
     <p class="empty" id="empty" hidden>No encontramos ese destino en la lista, pero seguro te lo armamos. <a href="#" data-wa="Hola Loytravel, quiero consultar por un destino que no vi en la web">Consultanos por WhatsApp</a>.</p>
+  </div>
+</section>
+
+<!-- CÓMO TRABAJAMOS -->
+<section class="sec sec--soft sec--steps" id="como">
+  <div class="wrap">
+    <div class="sec__head sec__head--center reveal">
+      <p class="kicker">Cómo trabajamos</p>
+      <h2>Tu viaje, en 3 pasos simples</h2>
+    </div>
+    <ol class="steps">
+      <li class="step reveal"><span class="step__n">01</span><h3>Nos contás tu idea</h3><p>Por WhatsApp, por el formulario o en la oficina. Destino, fechas y con quién viajás.</p></li>
+      <li class="step reveal"><span class="step__n">02</span><h3>Te armamos opciones</h3><p>Aéreos, hotel, traslados y asistencia. Te explicamos cada opción y elegís con calma.</p></li>
+      <li class="step reveal"><span class="step__n">03</span><h3>Viajás tranquilo</h3><p>Te acompañamos antes, durante y después del viaje. Si algo cambia, lo resolvemos.</p></li>
+    </ol>
   </div>
 </section>
 
@@ -177,6 +205,16 @@
   </div>
 </section>
 
+<!-- BANNER PARALLAX -->
+<section class="banner" aria-label="Brasil te espera">
+  <div class="banner__bg" style="background-image:url(img/hero-2.jpg)"></div>
+  <div class="wrap banner__in reveal">
+    <p class="kicker">Temporada de verano</p>
+    <h2>Brasil te está esperando.<br>Asegurá tu lugar antes de que se llenen los cupos.</h2>
+    <a href="#armatuviaje" class="btn btn--primary">Quiero cotizar mi viaje</a>
+  </div>
+</section>
+
 <!-- OPINIONES -->
 <section class="sec" id="opiniones">
   <div class="wrap">
@@ -201,12 +239,16 @@
     </div>
   </div>
   <div class="gallery" id="gallery">
-    <img src="img/cristo.jpg" alt="Cristo Redentor entre montañas" loading="lazy">
-    <img src="img/buzios.jpg" alt="Playa de agua turquesa con lanchas" loading="lazy">
-    <img src="img/salvador.jpg" alt="Casas coloniales coloridas" loading="lazy">
-    <img src="img/blog-2.jpg" alt="Teleférico del Pan de Azúcar" loading="lazy">
-    <img src="img/resort.jpg" alt="Piscina de resort con palmeras" loading="lazy">
-    <img src="img/floripa.jpg" alt="Playa con palmeras y sombrillas" loading="lazy">
+    <div class="gallery__track">
+      <img src="img/cristo.jpg" alt="Cristo Redentor entre montañas" loading="lazy">
+      <img src="img/buzios.jpg" alt="Playa de agua turquesa con lanchas" loading="lazy">
+      <img src="img/salvador.jpg" alt="Casas coloniales coloridas" loading="lazy">
+      <img src="img/blog-2.jpg" alt="Teleférico del Pan de Azúcar" loading="lazy">
+      <img src="img/resort.jpg" alt="Piscina de resort con palmeras" loading="lazy">
+      <img src="img/floripa.jpg" alt="Playa con palmeras y sombrillas" loading="lazy">
+      <img src="img/rio.jpg" alt="Pan de Azúcar al atardecer" loading="lazy">
+      <img src="img/porto.jpg" alt="Isla verde en el mar" loading="lazy">
+    </div>
   </div>
 </section>
 
