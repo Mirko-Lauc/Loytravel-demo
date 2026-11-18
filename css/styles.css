@@ -67,7 +67,7 @@ h3{font-size:1.2rem}
 .hero__slide.is-on{opacity:1;animation:kb 9s ease-out forwards}
 @keyframes kb{from{transform:scale(1.12) translate3d(0,0,0)}to{transform:scale(1.0) translate3d(-1.5%,-1%,0)}}
 .hero__shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,10,10,.82) 0%,rgba(10,10,10,.55) 45%,rgba(10,10,10,.15) 100%),linear-gradient(0deg,rgba(10,10,10,.6),transparent 40%)}
-.hero__in{position:relative;padding:140px 0 90px}
+.hero__in{position:relative;padding:160px 0 90px}
 .hero .kicker{color:var(--naranja)}
 .hero h1{color:#fff;font-size:clamp(2.5rem,7vw,4.8rem);max-width:13ch}
 
@@ -387,3 +387,9 @@ h3{font-size:1.2rem}
 .modal__txt h3{font-size:1.6rem;font-weight:400}
 .modal__txt p{color:var(--texto)}
 .modal__close{position:sticky;top:12px;float:right;margin:12px 12px -56px 0;width:44px;height:44px;border-radius:50%;border:0;background:rgba(17,17,17,.75);color:#fff;font-size:1.6rem;cursor:pointer;z-index:2}
+
+/* Logo oficial */
+.logo__img{width:96px;height:96px;border-radius:50%;box-shadow:0 6px 20px rgba(0,0,0,.35);transition:width .35s var(--ease),height .35s var(--ease);margin-top:34px}
+.is-solid .logo__img{width:52px;height:52px;margin-top:0}
+.logo--foot{width:84px;height:84px;border-radius:50%;margin-bottom:.6rem}
+@media (max-width:560px){.logo__img{width:74px;height:74px;margin-top:22px}.is-solid .logo__img{width:46px;height:46px;margin-top:0}}
