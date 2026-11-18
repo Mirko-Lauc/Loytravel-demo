@@ -4,12 +4,12 @@
   var clone = function (o) { return JSON.parse(JSON.stringify(o)); };
   var DEF = {
     textos: clone(window.LOY_TEXTOS), DESTINOS: clone(window.LOY_DESTINOS), PROMOS: clone(window.LOY_PROMOS),
-    BLOG: clone(window.LOY_BLOG), OPINIONES: clone(window.LOY_OPINIONES), WA: window.LOY_WA
+    BLOG: clone(window.LOY_BLOG), OPINIONES: clone(window.LOY_OPINIONES), EQUIPO: clone(window.LOY_EQUIPO), WA: window.LOY_WA
   };
   var C = clone(DEF), dirty = false;
   try {
     var s = JSON.parse(localStorage.getItem(KEY) || "null");
-    if (s) { Object.assign(C.textos, s.textos || {}); ["DESTINOS", "PROMOS", "BLOG", "OPINIONES", "WA"].forEach(function (k) { if (s[k] != null) C[k] = s[k]; }); }
+    if (s) { Object.assign(C.textos, s.textos || {}); ["DESTINOS", "PROMOS", "BLOG", "OPINIONES", "EQUIPO", "WA"].forEach(function (k) { if (s[k] != null) C[k] = s[k]; }); }
   } catch (e) {}
 
   var $ = function (id) { return document.getElementById(id); };
@@ -43,14 +43,14 @@
   function setP(p, v) { if (p.indexOf("textos|") === 0) { C.textos[p.slice(7)] = v; mark(); } else set(p, v); }
 
   /* ---------- Pantallas ---------- */
-  var TITLES = { inicio: "Resumen", portada: "Portada", destinos: "Destinos", promos: "Promociones del mes", blog: "Blog", opiniones: "Opiniones de viajeros", nosotros: "Quiénes somos", contacto: "Contacto y WhatsApp" };
+  var TITLES = { inicio: "Resumen", portada: "Portada", destinos: "Destinos", promos: "Promociones del mes", blog: "Blog", opiniones: "Opiniones de viajeros", equipo: "Equipo de ventas", nosotros: "Quiénes somos", contacto: "Contacto y WhatsApp" };
   var VIEWS = {
     inicio: function () {
       var n = function (a) { return a.length; };
       return '<div class="hello"><h3>¡Hola! 👋</h3><p>Elegí qué querés cambiar en el menú. Después tocá <b>Guardar cambios</b> y <b>Ver la web</b> para verlo publicado.</p></div>' +
         '<div class="stats">' +
         stat("📍", n(C.DESTINOS), "destinos", "destinos") + stat("🔥", n(C.PROMOS), "promociones", "promos") +
-        stat("📝", n(C.BLOG), "notas del blog", "blog") + stat("⭐", n(C.OPINIONES), "opiniones", "opiniones") + "</div>" +
+        stat("📝", n(C.BLOG), "notas del blog", "blog") + stat("⭐", n(C.OPINIONES), "opiniones", "opiniones") + stat("🧑‍💼", n(C.EQUIPO), "asesores", "equipo") + "</div>" +
         '<div class="tips"><h4>Cosas que podés hacer</h4><ul>' +
         "<li>Cambiar las fotos y el título de la portada para cada temporada.</li>" +
         "<li>Cargar la promo del mes con foto y etiqueta (por ejemplo, “Últimos cupos”).</li>" +
@@ -106,6 +106,19 @@
           return fText(p + "texto", "Opinión", d.texto, { area: true, rows: 3 }) + '<div class="row2">' + fText(p + "nombre", "Nombre", d.nombre) + fText(p + "destino", "Destino", d.destino) + "</div>";
         }, { texto: "", nombre: "", destino: "" });
     },
+    equipo: function () {
+      return '<p class="muted note">Cada asesor aparece con su foto (o el ícono de usuario si no cargás una), su especialidad, opiniones de sus clientes y un botón para hablar con él por WhatsApp.</p>' +
+        list("EQUIPO", "asesor", function (d, i) {
+          var p = "EQUIPO." + i + ".";
+          return '<div class="item__grid"><div>' + fImg(p + "foto", "Foto (opcional)", d.foto || "img/favicon.png") + "</div><div>" +
+            '<div class="row2">' + fText(p + "nombre", "Nombre", d.nombre) + fText(p + "rol", "Puesto", d.rol) + "</div>" +
+            fText(p + "esp", "Especialidad", d.esp, { ph: "Brasil y playas del Nordeste" }) +
+            '<label class="field"><span>Opiniones de sus clientes</span><textarea rows="4" data-ops="' + i + '">' +
+            esc((d.opiniones || []).map(function (o) { return o.texto + " | " + o.autor; }).join("\n")) +
+            '</textarea><small>Una por renglón: opinión | nombre del cliente. Cargá solo opiniones reales.</small></label>' +
+            '<label class="switch"><input type="checkbox" data-ej="' + i + '"' + (d.ejemplo ? " checked" : "") + '><span></span>Mostrar etiqueta “Ejemplo”</label></div></div>';
+        }, { nombre: "Nombre y apellido", rol: "Asesor/a de viajes", esp: "Especialidad", opiniones: [], ejemplo: false });
+    },
     nosotros: function () {
       var t = C.textos;
       return card("Quiénes somos", '<div class="item__grid"><div>' + fImg(tp("nos.foto"), "Foto del equipo u oficina", t["nos.foto"]) + "</div><div>" +
@@ -149,6 +162,10 @@
   content.addEventListener("input", function (e) {
     var el = e.target;
     if (el.dataset.path) setP(el.dataset.path, el.value);
+    else if (el.dataset.ops != null) {
+      C.EQUIPO[el.dataset.ops].opiniones = el.value.split("\n").map(function (l) { var x = l.split("|"); return { texto: (x[0] || "").trim(), autor: (x[1] || "Cliente").trim() }; }).filter(function (o) { return o.texto; });
+      mark();
+    }
     else if (el.dataset.body != null) { C.BLOG[el.dataset.body].cuerpo = el.value.split(/\n\s*\n/).map(function (x) { return x.trim(); }).filter(Boolean); mark(); }
   });
   content.addEventListener("change", function (e) {
@@ -157,6 +174,7 @@
       var d = C.DESTINOS[el.dataset.tag];
       d.tags = [].slice.call(content.querySelectorAll('[data-tag="' + el.dataset.tag + '"]:checked')).map(function (x) { return x.value; }); mark();
     }
+    if (el.dataset.ej != null) { C.EQUIPO[el.dataset.ej].ejemplo = el.checked; mark(); }
     if (el.dataset.big != null) { C.DESTINOS[el.dataset.big].destacado = el.checked; mark(); }
   });
 

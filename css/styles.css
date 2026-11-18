@@ -437,3 +437,23 @@ h3{font-size:1.2rem}
 .btn--ghost{background:transparent}
 .grid-promo{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
 #armatuviaje .split{gap:clamp(1.4rem,5vw,4.5rem)}
+
+/* ===== Equipo de ventas ===== */
+.grid-team{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.seller{position:relative;background:#fff;border-radius:24px;padding:1.6rem;box-shadow:var(--sombra);display:flex;flex-direction:column;gap:1.2rem;border-top:4px solid var(--naranja);transition:transform .4s var(--ease),box-shadow .4s}
+.seller:hover{transform:translateY(-6px);box-shadow:0 26px 60px rgba(17,17,17,.14)}
+.seller__top{display:flex;align-items:center;gap:1rem}
+.seller__av{position:relative;width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--negro),#3a2a10);display:grid;place-items:center;flex:none;box-shadow:0 0 0 4px #fff,0 0 0 6px var(--naranja)}
+.seller__av svg{width:46px;height:46px;fill:none;stroke:var(--naranja);stroke-width:4;stroke-linecap:round}
+.seller__av img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.seller__on{position:absolute;right:2px;bottom:4px;width:16px;height:16px;border-radius:50%;background:#39d97b;border:3px solid #fff}
+.seller__role{font:700 .7rem var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--naranja-osc)}
+.seller h3{font-size:1.35rem;font-weight:400;margin:.1rem 0}
+.seller__esp{font-size:.88rem;color:var(--gris)}
+.seller__ops{display:grid;gap:.7rem;flex:1}
+.seller__ops blockquote{background:var(--crema);border-radius:14px;padding:.9rem 1rem}
+.seller__ops p{font-size:.9rem;font-style:italic;margin:.2rem 0}
+.seller__ops footer{font:600 .76rem var(--ui);color:var(--gris)}
+.stars{color:var(--naranja);letter-spacing:2px;font-size:.85rem}
+.seller .op__tag{top:16px;right:16px}
+@media (max-width:860px){.grid-team{grid-template-columns:1fr}}

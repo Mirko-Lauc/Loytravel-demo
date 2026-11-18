@@ -5,7 +5,7 @@
     var saved = JSON.parse(localStorage.getItem("loy_content") || "null");
     if (saved) {
       if (saved.textos) Object.assign(window.LOY_TEXTOS, saved.textos);
-      ["DESTINOS", "PROMOS", "BLOG", "OPINIONES"].forEach(function (k) { if (Array.isArray(saved[k])) window["LOY_" + k] = saved[k]; });
+      ["DESTINOS", "PROMOS", "BLOG", "OPINIONES", "EQUIPO"].forEach(function (k) { if (Array.isArray(saved[k])) window["LOY_" + k] = saved[k]; });
       if (saved.WA) window.LOY_WA = saved.WA;
     }
   } catch (e) {}
@@ -91,6 +91,20 @@
       return '<blockquote class="op op--real reveal"><p>"' + esc(o.texto) + '"</p><footer>' + esc(o.nombre) + (o.destino ? " · " + esc(o.destino) : "") + "</footer></blockquote>";
     }).join("");
   }
+
+  /* ---------- Equipo de ventas ---------- */
+  var USER_SVG = '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="24" r="12"/><path d="M10 56c2-12 11-18 22-18s20 6 22 18"/></svg>';
+  var STARS = '<span class="stars" aria-label="5 de 5">★★★★★</span>';
+  document.getElementById("gridTeam").innerHTML = window.LOY_EQUIPO.map(function (v) {
+    var first = String(v.nombre).split(" ")[0];
+    return '<article class="seller reveal">' + (v.ejemplo ? '<span class="op__tag">Ejemplo</span>' : "") +
+      '<div class="seller__top"><div class="seller__av">' + (v.foto ? '<img src="' + v.foto + '" alt="">' : USER_SVG) + '<span class="seller__on"></span></div>' +
+      '<div><span class="seller__role">' + esc(v.rol) + "</span><h3>" + esc(v.nombre) + '</h3><span class="seller__esp">' + esc(v.esp) + "</span></div></div>" +
+      '<div class="seller__ops">' + (v.opiniones || []).map(function (o) {
+        return '<blockquote>' + STARS + "<p>“" + esc(o.texto) + "”</p><footer>— " + esc(o.autor) + "</footer></blockquote>";
+      }).join("") + "</div>" +
+      '<a href="#" class="btn btn--wa btn--block" data-wa="Hola Loytravel, quiero hablar con ' + esc(first) + ' para armar un viaje">Hablar con ' + esc(first) + "</a></article>";
+  }).join("");
 
   /* ---------- Test: ¿Qué Brasil es para vos? ---------- */
   var QZ = [

@@ -34,6 +34,19 @@ window.LOY_TEXTOS = {
 // Opiniones reales de viajeros (vacío = se muestran los espacios de ejemplo)
 window.LOY_OPINIONES = [];
 
+// Equipo de ventas (EJEMPLO: nombres y opiniones de muestra hasta tener los reales)
+window.LOY_EQUIPO = [
+  { nombre: "Lucía Fernández", rol: "Asesora de viajes", esp: "Brasil y playas del Nordeste", ejemplo: true,
+    opiniones: [{ texto: "Nos armó el viaje a Maceió con los chicos y estuvo pendiente de todo.", autor: "Cliente de ejemplo" },
+                { texto: "Respondía rápido por WhatsApp, incluso cuando estábamos allá.", autor: "Cliente de ejemplo" }] },
+  { nombre: "Martín Gómez", rol: "Asesor de viajes", esp: "Río de Janeiro y viajes en pareja", ejemplo: true,
+    opiniones: [{ texto: "Nos recomendó un hotel en Búzios que fue lo mejor del viaje.", autor: "Cliente de ejemplo" },
+                { texto: "Explica todo con paciencia y sin vueltas.", autor: "Cliente de ejemplo" }] },
+  { nombre: "Carla Ruiz", rol: "Asesora de viajes", esp: "All inclusive y cruceros", ejemplo: true,
+    opiniones: [{ texto: "Primera vez en un crucero y nos sentimos acompañados de principio a fin.", autor: "Cliente de ejemplo" },
+                { texto: "Nos consiguió buenas cuotas con tarjeta.", autor: "Cliente de ejemplo" }] }
+];
+
 // Etiquetas: playa · familia · pareja · ciudad · all
 window.LOY_DESTINOS = [
   { nombre: "Río de Janeiro", zona: "Sudeste", img: "img/rio.jpg", tags: ["ciudad", "playa", "pareja"],
