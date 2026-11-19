@@ -5,7 +5,7 @@
     var saved = JSON.parse(localStorage.getItem("loy_content") || "null");
     if (saved) {
       if (saved.textos) Object.assign(window.LOY_TEXTOS, saved.textos);
-      ["DESTINOS", "PROMOS", "BLOG", "OPINIONES", "EQUIPO"].forEach(function (k) { if (Array.isArray(saved[k])) window["LOY_" + k] = saved[k]; });
+      ["DESTINOS", "PROMOS", "PORTAL", "OPINIONES", "EQUIPO"].forEach(function (k) { if (Array.isArray(saved[k])) window["LOY_" + k] = saved[k]; });
       if (saved.WA) window.LOY_WA = saved.WA;
     }
   } catch (e) {}
@@ -59,31 +59,73 @@
     filtro = b.dataset.f; filtrar();
   });
 
-  /* ---------- Promos y blog ---------- */
+  /* ---------- Promos ---------- */
   document.getElementById("gridPromo").innerHTML = window.LOY_PROMOS.map(function (p) {
     return '<article class="promo reveal"><img src="' + p.img + '" alt="" loading="lazy"><div class="promo__body">' +
       '<span class="promo__tag">' + esc(p.etiqueta) + "</span><h3>" + esc(p.titulo) + "</h3><p>" + esc(p.detalle) + "</p>" +
       '<a href="#" class="btn btn--primary btn--sm" data-wa="Hola Loytravel, quiero el precio de la promo: ' + esc(p.titulo) + '">Consultar precio</a></div></article>';
   }).join("");
 
-  document.getElementById("gridBlog").innerHTML = window.LOY_BLOG.map(function (b, i) {
-    return '<article class="post reveal"><div class="post__img"><img src="' + b.img + '" alt="" loading="lazy"></div>' +
-      '<div class="post__body"><span class="post__date">' + esc(b.fecha) + "</span><h3>" + esc(b.titulo) + "</h3><p>" + esc(b.txt) + "</p>" +
-      '<button type="button" class="post__more" data-post="' + i + '">Leer nota <span>→</span></button></div></article>';
-  }).join("");
+  /* ---------- Canal de difusión ---------- */
+  var canal = String(T["contacto.canal"] || "").trim();
+  if (/^https:\/\/(www\.)?whatsapp\.com\/channel\/[\w-]+$/.test(canal)) {
+    document.querySelectorAll(".js-canal").forEach(function (el) {
+      el.hidden = false;
+      if (el.tagName === "A") { el.href = canal; el.target = "_blank"; el.rel = "noopener"; }
+    });
+  }
 
-  var modal = document.getElementById("postModal");
-  document.getElementById("gridBlog").addEventListener("click", function (e) {
-    var bt = e.target.closest("[data-post]"); if (!bt) return;
-    var b = window.LOY_BLOG[bt.dataset.post];
-    modal.querySelector(".modal__body").innerHTML =
-      '<img src="' + b.img + '" alt=""><div class="modal__txt"><span class="post__date">' + esc(b.fecha) + "</span><h3>" + esc(b.titulo) + "</h3>" +
-      b.cuerpo.map(function (t) { return "<p>" + esc(t) + "</p>"; }).join("") +
-      '<a href="#" class="btn btn--primary" data-wa="Hola Loytravel, leí la nota &quot;' + esc(b.titulo) + '&quot; y quiero consultar">Quiero viajar</a></div>';
-    bindWa(modal); modal.showModal(); document.body.style.overflow = "hidden";
+  /* ---------- Portal digital ---------- */
+  var P = window.LOY_PORTAL || [];
+  var ytOk = function (id) { return /^[\w-]{11}$/.test(id); };
+  document.getElementById("gridPortal").innerHTML = P.map(function (p, i) {
+    return '<button type="button" class="pcard reveal" data-portal="' + i + '">' +
+      (p.img ? '<img src="' + esc(p.img) + '" alt="" loading="lazy">' : "") +
+      '<span class="pcard__n">' + ("0" + (i + 1)).slice(-2) + "</span>" + (p.ejemplo ? '<span class="op__tag">Ejemplo</span>' : "") +
+      '<span class="pcard__body"><small>' + esc(p.sub || "") + "</small><h3>" + esc(p.titulo || "") + '</h3><span class="pcard__cta">Ver material</span></span></button>';
+  }).join("");
+  document.getElementById("portalNote").hidden = !P.some(function (p) { return p.ejemplo; });
+
+  var pmodal = document.getElementById("portalModal"), lb = document.getElementById("lightbox"), lbFotos = [], lbI = 0;
+  document.getElementById("gridPortal").addEventListener("click", function (e) {
+    var bt = e.target.closest("[data-portal]"); if (!bt) return;
+    var p = P[bt.dataset.portal], fotos = p.fotos || [], vids = (p.videos || []).filter(ytOk);
+    lbFotos = fotos;
+    pmodal.querySelector(".modal__body").innerHTML = '<div class="pmodal__in"><div><p class="kicker">Portal digital' + (p.sub ? " · " + esc(p.sub) : "") + "</p><h3>" + esc(p.titulo) + "</h3></div>" +
+      (fotos.length ? '<h4>Fotos</h4><div class="pgal">' + fotos.map(function (f, j) {
+        return '<button type="button" data-ph="' + j + '" aria-label="Ampliar foto ' + (j + 1) + '"><img src="' + esc(f) + '" alt="" loading="lazy"></button>';
+      }).join("") + "</div>" : "") +
+      (vids.length ? '<h4>Videos</h4><div class="pvid">' + vids.map(function (id) {
+        return '<div class="pvid__item"><iframe src="https://www.youtube-nocookie.com/embed/' + id + '?rel=0" title="Video de ' + esc(p.titulo) + '" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';
+      }).join("") + "</div>" : "") +
+      (!fotos.length && !vids.length ? '<p class="pmodal__empty">Muy pronto vas a encontrar acá fotos y videos de este destino.</p>' : "") +
+      '<a href="#" class="btn btn--primary" data-wa="Hola Loytravel, vi el material de ' + esc(p.titulo) + ' en el portal digital y quiero consultar">Quiero viajar a ' + esc(p.titulo) + "</a></div>";
+    bindWa(pmodal); pmodal.showModal(); document.body.style.overflow = "hidden";
   });
-  modal.addEventListener("close", function () { document.body.style.overflow = ""; });
-  modal.addEventListener("click", function (e) { if (e.target === modal || e.target.closest(".modal__close")) modal.close(); });
+  pmodal.addEventListener("close", function () {
+    pmodal.querySelector(".modal__body").innerHTML = ""; // corta los videos que estaban sonando
+    document.body.style.overflow = "";
+  });
+  pmodal.addEventListener("click", function (e) {
+    if (e.target === pmodal || e.target.closest(".modal__close")) { pmodal.close(); return; }
+    var ph = e.target.closest("[data-ph]"); if (ph) showPhoto(+ph.dataset.ph);
+  });
+  function showPhoto(i) {
+    lbI = (i + lbFotos.length) % lbFotos.length;
+    lb.querySelector("img").src = lbFotos[lbI];
+    lb.querySelector(".lightbox__count").textContent = (lbI + 1) + " de " + lbFotos.length;
+    lb.querySelectorAll(".lightbox__prev, .lightbox__next").forEach(function (b) { b.hidden = lbFotos.length < 2; });
+    if (!lb.open) lb.showModal();
+  }
+  lb.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-lb]");
+    if (b) { if (b.dataset.lb === "x") lb.close(); else showPhoto(lbI + +b.dataset.lb); }
+    else if (e.target === lb) lb.close();
+  });
+  lb.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") showPhoto(lbI + 1);
+    if (e.key === "ArrowLeft") showPhoto(lbI - 1);
+  });
 
   /* ---------- Opiniones reales (si las cargaron en el panel) ---------- */
   if (window.LOY_OPINIONES.length) {
@@ -157,7 +199,7 @@
 
   bindWa();
 
-  /* ---------- Formulario Armá tu viaje -> WhatsApp ---------- */
+  /* ---------- Formulario Solicitá tu viaje -> WhatsApp ---------- */
   var form = document.getElementById("formViaje");
   function armarMsg() {
     var f = form.elements;

@@ -4,12 +4,12 @@
   var clone = function (o) { return JSON.parse(JSON.stringify(o)); };
   var DEF = {
     textos: clone(window.LOY_TEXTOS), DESTINOS: clone(window.LOY_DESTINOS), PROMOS: clone(window.LOY_PROMOS),
-    BLOG: clone(window.LOY_BLOG), OPINIONES: clone(window.LOY_OPINIONES), EQUIPO: clone(window.LOY_EQUIPO), WA: window.LOY_WA
+    PORTAL: clone(window.LOY_PORTAL), OPINIONES: clone(window.LOY_OPINIONES), EQUIPO: clone(window.LOY_EQUIPO), WA: window.LOY_WA
   };
   var C = clone(DEF), dirty = false;
   try {
     var s = JSON.parse(localStorage.getItem(KEY) || "null");
-    if (s) { Object.assign(C.textos, s.textos || {}); ["DESTINOS", "PROMOS", "BLOG", "OPINIONES", "EQUIPO", "WA"].forEach(function (k) { if (s[k] != null) C[k] = s[k]; }); }
+    if (s) { Object.assign(C.textos, s.textos || {}); ["DESTINOS", "PROMOS", "PORTAL", "OPINIONES", "EQUIPO", "WA"].forEach(function (k) { if (s[k] != null) C[k] = s[k]; }); }
   } catch (e) {}
 
   var $ = function (id) { return document.getElementById(id); };
@@ -43,19 +43,19 @@
   function setP(p, v) { if (p.indexOf("textos|") === 0) { C.textos[p.slice(7)] = v; mark(); } else set(p, v); }
 
   /* ---------- Pantallas ---------- */
-  var TITLES = { inicio: "Resumen", portada: "Portada", destinos: "Destinos", promos: "Promociones del mes", blog: "Blog", opiniones: "Opiniones de viajeros", equipo: "Equipo de ventas", nosotros: "Quiénes somos", contacto: "Contacto y WhatsApp" };
+  var TITLES = { inicio: "Resumen", portada: "Portada", destinos: "Destinos", promos: "Promociones del mes", portal: "Portal digital", opiniones: "Opiniones de viajeros", equipo: "Equipo de ventas", nosotros: "Quiénes somos", contacto: "Contacto y WhatsApp" };
   var VIEWS = {
     inicio: function () {
       var n = function (a) { return a.length; };
       return '<div class="hello"><h3>¡Hola! 👋</h3><p>Elegí qué querés cambiar en el menú. Después tocá <b>Guardar cambios</b> y <b>Ver la web</b> para verlo publicado.</p></div>' +
         '<div class="stats">' +
         stat("📍", n(C.DESTINOS), "destinos", "destinos") + stat("🔥", n(C.PROMOS), "promociones", "promos") +
-        stat("📝", n(C.BLOG), "notas del blog", "blog") + stat("⭐", n(C.OPINIONES), "opiniones", "opiniones") + stat("🧑‍💼", n(C.EQUIPO), "asesores", "equipo") + "</div>" +
+        stat("📸", n(C.PORTAL), "destinos en el portal", "portal") + stat("⭐", n(C.OPINIONES), "opiniones", "opiniones") + stat("🧑‍💼", n(C.EQUIPO), "asesores", "equipo") + "</div>" +
         '<div class="tips"><h4>Cosas que podés hacer</h4><ul>' +
         "<li>Cambiar las fotos y el título de la portada para cada temporada.</li>" +
         "<li>Cargar la promo del mes con foto y etiqueta (por ejemplo, “Últimos cupos”).</li>" +
         "<li>Agregar un destino nuevo y elegir en qué filtros aparece.</li>" +
-        "<li>Publicar notas en el blog para aparecer más en Google.</li>" +
+        "<li>Subir fotos y videos de YouTube de cada destino al portal digital.</li>" +
         "<li>Sumar opiniones reales de tus viajeros.</li></ul></div>";
     },
     portada: function () {
@@ -90,14 +90,22 @@
           fText(p + "etiqueta", "Etiqueta", d.etiqueta, { ph: "Últimos cupos, Enero, Luna de miel…", help: "Sin precio: el botón “Consultar precio” lleva a WhatsApp con la promo escrita." }) + "</div></div>";
       }, { titulo: "Nueva promoción", detalle: "Aéreo + 7 noches + traslados", etiqueta: "Nueva", img: "img/porto.jpg" });
     },
-    blog: function () {
-      return list("BLOG", "nota", function (d, i) {
-        var p = "BLOG." + i + ".";
-        return '<div class="item__grid"><div>' + fImg(p + "img", "Foto", d.img) + "</div><div>" +
-          '<div class="row2">' + fText(p + "titulo", "Título", d.titulo) + fText(p + "fecha", "Fecha", d.fecha) + "</div>" +
-          fText(p + "txt", "Resumen (se ve en la tarjeta)", d.txt, { area: true, rows: 2 }) +
-          '<label class="field"><span>Texto completo</span><textarea rows="6" data-body="' + i + '">' + esc((d.cuerpo || []).join("\n\n")) + '</textarea><small>Dejá una línea en blanco entre párrafos.</small></label></div></div>';
-      }, { titulo: "Nueva nota", fecha: "Noviembre 2026", img: "img/blog-1.jpg", txt: "Resumen de la nota.", cuerpo: ["Primer párrafo de la nota."] });
+    portal: function () {
+      var t = C.textos;
+      return card("Textos de la sección", fText(tp("portal.titulo"), "Título", t["portal.titulo"]) + fText(tp("portal.sub"), "Bajada", t["portal.sub"], { area: true, rows: 2 })) +
+        '<p class="muted note">Cada tarjeta abre una galería con sus fotos y videos. Los videos se suben a YouTube y acá se pega el link.</p>' +
+        list("PORTAL", "destino", function (d, i) {
+          var p = "PORTAL." + i + ".";
+          return '<div class="item__grid"><div>' + fImg(p + "img", "Foto de la tarjeta", d.img) + "</div><div>" +
+            '<div class="row2">' + fText(p + "titulo", "Destino", d.titulo) + fText(p + "sub", "Texto chico", d.sub, { ph: "Aéreo, Bus, Nordeste…" }) + "</div>" +
+            '<div class="field"><span>Fotos de la galería (' + (d.fotos || []).length + ')</span><div class="thumbs">' +
+            (d.fotos || []).map(function (f, j) { return '<div class="thumb"><img src="' + esc(f) + '" alt=""><button type="button" title="Quitar foto" data-delph="' + i + "," + j + '">×</button></div>'; }).join("") +
+            '<button type="button" class="thumbs__add" data-addph="' + i + '">+ Agregar fotos</button></div><small>Podés elegir varias fotos a la vez.</small></div>' +
+            '<label class="field"><span>Videos de YouTube</span><textarea rows="3" data-vids="' + i + '" placeholder="https://youtu.be/...">' +
+            esc((d.videos || []).map(function (id) { return "https://youtu.be/" + id; }).join("\n")) +
+            '</textarea><small>Un link por renglón.</small></label>' +
+            '<label class="switch"><input type="checkbox" data-pej="' + i + '"' + (d.ejemplo ? " checked" : "") + '><span></span>Mostrar etiqueta “Ejemplo”</label></div></div>';
+        }, { titulo: "Nuevo destino", sub: "", img: "img/porto.jpg", fotos: [], videos: [], ejemplo: false });
     },
     opiniones: function () {
       return '<p class="muted note">Cargá solo opiniones reales, con permiso del viajero. Mientras no haya ninguna, la web muestra los espacios de ejemplo.</p>' +
@@ -128,6 +136,7 @@
       var t = C.textos;
       return card("Datos de contacto", fText(tp("contacto.dir"), "Dirección", t["contacto.dir"]) + fText(tp("contacto.horario"), "Horarios", t["contacto.horario"]) +
         fText(tp("contacto.ig"), "Instagram", t["contacto.ig"])) +
+        card("Canal de difusión", fText(tp("contacto.canal"), "Link del canal de WhatsApp", t["contacto.canal"] || "", { ph: "https://whatsapp.com/channel/...", help: "Si lo dejás vacío, los botones del canal no se muestran." })) +
         card("WhatsApp", fText("WA", "Número de WhatsApp", C.WA, { help: "Con código de país, sin + ni espacios. Ej.: 5493512265069" }) +
           '<a class="btn btn--sm btn--dark" target="_blank" rel="noopener" href="https://wa.me/' + esc(C.WA) + '">Probar el número ↗</a>');
     }
@@ -166,7 +175,6 @@
       C.EQUIPO[el.dataset.ops].opiniones = el.value.split("\n").map(function (l) { var x = l.split("|"); return { texto: (x[0] || "").trim(), autor: (x[1] || "Cliente").trim() }; }).filter(function (o) { return o.texto; });
       mark();
     }
-    else if (el.dataset.body != null) { C.BLOG[el.dataset.body].cuerpo = el.value.split(/\n\s*\n/).map(function (x) { return x.trim(); }).filter(Boolean); mark(); }
   });
   content.addEventListener("change", function (e) {
     var el = e.target;
@@ -209,6 +217,63 @@
       img.src = rd.result;
     };
     rd.readAsDataURL(f);
+  });
+
+
+  /* ---------- Portal digital: fotos y videos ---------- */
+  var filesIn = $("files"), phTarget = null;
+  function ytId(l) {
+    l = l.trim(); if (/^[\w-]{11}$/.test(l)) return l;
+    var m = l.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([\w-]{11})/);
+    return m ? m[1] : null;
+  }
+  function resize(file, cb) {
+    var rd = new FileReader();
+    rd.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var max = 1800, sc = Math.min(1, max / Math.max(img.width, img.height));
+        var cv = document.createElement("canvas"); cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc);
+        cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height); cb(cv);
+      };
+      img.onerror = function () { cb(null); };
+      img.src = rd.result;
+    };
+    rd.readAsDataURL(file);
+  }
+  function storeCanvas(cv, cb) { cb(cv.toDataURL("image/jpeg", 0.72)); }
+  content.addEventListener("click", function (e) {
+    var a = e.target.closest("[data-addph]");
+    if (a) { phTarget = +a.dataset.addph; filesIn.value = ""; filesIn.click(); return; }
+    var d = e.target.closest("[data-delph]");
+    if (d) { var x = d.dataset.delph.split(","); C.PORTAL[+x[0]].fotos.splice(+x[1], 1); mark(); draw(); }
+  });
+  content.addEventListener("input", function (e) {
+    var el = e.target; if (el.dataset.vids == null) return;
+    C.PORTAL[+el.dataset.vids].videos = el.value.split("\n").map(ytId).filter(Boolean); mark();
+  });
+  content.addEventListener("change", function (e) {
+    var el = e.target; if (el.dataset.pej != null) { C.PORTAL[+el.dataset.pej].ejemplo = el.checked; mark(); }
+  });
+  filesIn.addEventListener("change", function () {
+    var list = [].slice.call(filesIn.files), item = C.PORTAL[phTarget], done = 0, ok = 0;
+    if (!list.length || !item) return;
+    item.fotos = item.fotos || [];
+    var slots = list.map(function () { return null; });
+    say("Subiendo " + list.length + (list.length > 1 ? " fotos…" : " foto…"));
+    list.forEach(function (f, k) {
+      resize(f, function (cv) {
+        var fin = function (url) {
+          slots[k] = url; if (url) ok++;
+          if (++done === list.length) {
+            slots.forEach(function (u) { if (u) item.fotos.push(u); });
+            mark(); draw();
+            say(ok === list.length ? "Fotos agregadas. Tocá Guardar cambios." : "Algunas fotos no se pudieron cargar. Probá de nuevo con esas.");
+          }
+        };
+        if (cv) storeCanvas(cv, fin); else fin(null);
+      });
+    });
   });
 
   $("save").addEventListener("click", function () {
